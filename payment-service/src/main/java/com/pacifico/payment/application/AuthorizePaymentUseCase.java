@@ -28,12 +28,16 @@ public class AuthorizePaymentUseCase {
     }
 
     public Mono<PaymentAuthorizationResult> authorize(PaymentAuthorizationCommand command) {
-
-        var result = engine.authorize(command);
-
-        var entity = mapper.toEntity(command, result);
-
-        return repository.save(entity)
-                .thenReturn(result);
+        // First check if payment authorization already exists for this requestId
+        return repository.findByRequestId(command.requestId())
+                .map(existing -> mapper.toResult(existing))
+                .switchIfEmpty(
+                    // If not exists, authorize and save new payment
+                    Mono.fromSupplier(() -> engine.authorize(command))
+                        .flatMap(result -> {
+                            var entity = mapper.toEntity(command, result);
+                            return repository.save(entity).thenReturn(result);
+                        })
+                );
     }
 }
