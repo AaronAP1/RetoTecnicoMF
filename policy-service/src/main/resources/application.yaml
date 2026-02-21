@@ -3,19 +3,26 @@ spring:
     name: policy-service
   r2dbc:
     url: r2dbc:h2:mem:///policydb;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    sql:
-      init:
-        mode: always
+  sql:
+    init:
+      mode: always
 
 server:
   port: 8080
 
 payment:
   base-url: http://localhost:8081
-  timeout-ms: 2000
+  timeout-ms: 5000
 
 management:
   endpoints:
     web:
       exposure:
         include: health,info,metrics
+
+logging:
+  level:
+    com.pacifico.policy: DEBUG
+    org.springframework.r2dbc: DEBUG
+    org.springframework.web.reactive.function.client: DEBUG
+    reactor.netty.http.client: DEBUG
