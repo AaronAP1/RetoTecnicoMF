@@ -31,6 +31,12 @@
             <artifactId>spring-boot-starter-data-r2dbc</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
         <!-- H2 driver for R2DBC -->
         <dependency>
             <groupId>io.r2dbc</groupId>

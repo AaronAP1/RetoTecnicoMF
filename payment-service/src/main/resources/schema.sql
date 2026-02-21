@@ -1,5 +1,5 @@
 create table if not exists payment_authorizations (
-    authorization_id varchar(40) primary key,
+    authorization_id varchar(50) primary key,
     request_id varchar(60) not null unique,
     status varchar(20) not null,
     amount decimal(12,2) not null,
