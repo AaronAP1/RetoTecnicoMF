@@ -371,52 +371,7 @@ void restController_ShouldIssuePolicySuccessfully() {
 
 ---
 
-## 🚨 Problemas Conocidos y Soluciones
 
-### 1. Error: "Name for argument not specified"
-**Problema**: Spring WebFlux no puede resolver parámetros sin nombres.
-
-**✅ Solución**: Agregar flag `-parameters` al compilador
-```xml
-<plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-compiler-plugin</artifactId>
-    <configuration>
-        <parameters>true</parameters>
-    </configuration>
-</plugin>
-```
-
-### 2. Error: Repository.save() no funciona para inserts
-**Problema**: R2DBC requiere diferentes métodos para insert vs update.
-
-**✅ Solución**: Implementar método específico
-```java
-// ❌ Incorrecto para nuevos registros
-return repository.save(entity);
-
-// ✅ Correcto para inserts  
-return repository.insertPolicy(entity)
-    .then(Mono.just(entity));
-```
-
-### 3. Error: "No property isNew found"
-**Problema**: Spring Data requiere método `isNew()` en entidades.
-
-**✅ Solución**: Implementar interfaz `Persistable<>`
-```java
-@Entity
-public class PolicyEntity implements Persistable<String> {
-    private boolean isNew = true;
-    
-    @Override
-    public boolean isNew() {
-        return isNew;
-    }
-}
-```
-
----
 
 ## 🔍 Características Técnicas Destacadas
 
