@@ -40,26 +40,7 @@ public record PolicyEntity(
         Instant createdAt,
 
         @Column("issued_at")
-        Instant issuedAt,
+        Instant issuedAt
+) {
 
-        @Transient
-        boolean isNew
-) implements Persistable<String> {
-
-    public PolicyEntity(String policyId, String requestId, String status, String productType,
-                       BigDecimal premiumAmount, String premiumCurrency, String paymentRequestId,
-                       String paymentAuthorizationId, Instant createdAt, Instant issuedAt) {
-        this(policyId, requestId, status, productType, premiumAmount, premiumCurrency,
-             paymentRequestId, paymentAuthorizationId, createdAt, issuedAt, true);
-    }
-
-    @Override
-    public String getId() {
-        return policyId;
-    }
-
-    @Override
-    public boolean isNew() {
-        return isNew;
-    }
 }
