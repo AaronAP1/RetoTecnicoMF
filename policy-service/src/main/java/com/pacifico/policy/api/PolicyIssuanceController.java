@@ -8,6 +8,7 @@ import com.pacifico.policy.domain.model.PolicyIssuanceResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -42,13 +43,14 @@ public class PolicyIssuanceController {
     }
 
     @GetMapping("/{requestId}")
-    public Mono<PolicyIssuanceResponse> getPolicyByRequestId(@PathVariable String requestId) {
+    public Mono<ResponseEntity<PolicyIssuanceResponse>> getPolicyByRequestId(@PathVariable String requestId) {
         log.info("Getting policy by requestId: {}", requestId);
 
         return useCase.findByRequestId(requestId)
                 .map(this::toResponse)
-                .doOnSuccess(response -> log.info("Policy found: {}", response.policyId()))
-                .switchIfEmpty(Mono.error(new PolicyNotFoundException("Policy not found for requestId: " + requestId)));
+                .map(ResponseEntity::ok)
+                .doOnSuccess(response -> log.info("Policy found: {}", response.getBody().policyId()))
+                .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
     private PolicyIssuanceResponse toResponse(PolicyIssuanceResult result) {

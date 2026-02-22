@@ -21,8 +21,7 @@ public class PolicyMapper {
                 result.paymentRequestId(),
                 result.paymentAuthorizationId(),
                 result.createdAt(),
-                result.issuedAt(),
-                true  // Always true for new entities
+                result.issuedAt()
         );
     }
 
@@ -37,8 +36,7 @@ public class PolicyMapper {
                 result.paymentRequestId(),
                 result.paymentAuthorizationId(),
                 result.createdAt(),
-                result.issuedAt(),
-                false  // false for updates
+                result.issuedAt()
         );
     }
 

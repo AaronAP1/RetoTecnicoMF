@@ -56,8 +56,9 @@ public class IssuePolicyUseCase {
                 now
         );
 
-        // 2. Guardar póliza inicial
-        return repository.save(mapper.toEntity(initialResult))
+        // 2. Guardar póliza inicial - CAMBIO AQUÍ
+        return repository.insertPolicy(mapper.toEntity(initialResult))
+                .then(Mono.just(mapper.toEntity(initialResult)))
                 .flatMap(savedEntity -> {
                     log.info("Policy created with ID: {}, proceeding with payment authorization", policyId);
 
@@ -80,6 +81,7 @@ public class IssuePolicyUseCase {
                                             initialResult, paymentResponse.authorizationId());
                                     var issuedResult = PolicyIssuanceResult.issued(authorizedResult, Instant.now(clock));
 
+                                    // CAMBIO: Para updates usar save() está bien
                                     return repository.save(mapper.toEntityForUpdate(issuedResult))
                                             .map(mapper::toResult);
                                 } else {
